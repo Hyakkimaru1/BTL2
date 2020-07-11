@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 29, 2020 9:30:22 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="qlhn" name="btl2.entiny.Diadiem" optimistic-lock="version" table="diadiem">
+    <id name="id" type="int">
+      <column name="id"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="ten" type="string">
+      <column name="ten"/>
+    </property>
+    <property name="diachi" type="string">
+      <column name="diachi"/>
+    </property>
+    <property name="succhua" type="java.lang.Integer">
+      <column name="succhua"/>
+    </property>
+    <set fetch="select" inverse="true" lazy="true" name="hoinghis" table="hoinghi">
+      <key>
+        <column name="diadiem"/>
+      </key>
+      <one-to-many class="btl2.entiny.Hoinghi"/>
+    </set>
+  </class>
+</hibernate-mapping>

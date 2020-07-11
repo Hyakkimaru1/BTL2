@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 29, 2020 9:30:22 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="qlhn" name="btl2.entiny.Nguoithamgiahoinghi" optimistic-lock="version" table="nguoithamgiahoinghi">
+    <composite-id class="btl2.entiny.NguoithamgiahoinghiId" name="id">
+      <key-property name="user" type="int">
+        <column name="user"/>
+      </key-property>
+      <key-property name="hoinghi" type="int">
+        <column name="hoinghi"/>
+      </key-property>
+    </composite-id>
+    <many-to-one class="btl2.entiny.Hoinghi" fetch="select" insert="false" name="hoinghi" update="false">
+      <column name="hoinghi" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="btl2.entiny.User" fetch="select" insert="false" name="user" update="false">
+      <column name="user" not-null="true"/>
+    </many-to-one>
+    <property name="thoigianthamgia" type="timestamp">
+      <column length="19" name="thoigianthamgia"/>
+    </property>
+    <property name="isallow" type="int">
+      <column name="isallow"/>
+    </property>
+  </class>
+</hibernate-mapping>

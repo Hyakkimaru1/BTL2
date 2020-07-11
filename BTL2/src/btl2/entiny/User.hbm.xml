@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 29, 2020 9:30:22 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="qlhn" name="btl2.entiny.User" optimistic-lock="version" table="user">
+    <id name="id" type="int">
+      <column name="id"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="username" type="string">
+      <column name="username"/>
+    </property>
+    <property name="password" type="string">
+      <column name="password"/>
+    </property>
+    <property name="ten" type="string">
+      <column name="ten"/>
+    </property>
+    <property name="email" type="string">
+      <column name="email"/>
+    </property>
+    <property name="timeCreate" type="timestamp">
+      <column length="19" name="timeCreate"/>
+    </property>
+    <property name="isDelete" type="java.lang.Boolean">
+      <column name="isDelete"/>
+    </property>
+    <property name="permission" type="int">
+      <column name="permission"/>
+    </property>
+    <set fetch="select" inverse="true" lazy="true" name="nguoithamgiahoinghis" table="nguoithamgiahoinghi">
+      <key>
+        <column name="user" not-null="true"/>
+      </key>
+      <one-to-many class="btl2.entiny.Nguoithamgiahoinghi"/>
+    </set>
+  </class>
+</hibernate-mapping>
