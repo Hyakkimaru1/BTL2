@@ -83,7 +83,7 @@ public class HoiNghiDAO {
             //if use open then flush and close session
             //if getCurrent then session.getTransaction().commit(); faster
             Session session = NewHibernateUtil.getSessionFactory().openSession();
-            hoinghis = session.createQuery("select hn from Hoinghi hn, Diadiem dm where hn.diadiem = dm.id and hn.thoigiankt > current_time").list();
+            hoinghis = session.createQuery("select hn from Hoinghi hn, Diadiem dm where hn.diadiem = dm.id and hn.thoigianbd > current_time").list();
             tx=session.beginTransaction();
             tx.commit();
             session.close();

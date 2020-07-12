@@ -78,7 +78,7 @@ public class AdminManage extends javax.swing.JPanel {
         jList1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                if (!jList1.getSelectedValue().isHetHan()){
+                if (!jList1.getSelectedValue().isBatDau()){
                     Home.swapLayout(new AddHoiNghi(jList1.getSelectedValue()));
                 }
             }

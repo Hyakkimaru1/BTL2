@@ -27,6 +27,7 @@ public class Hoinghi  implements java.io.Serializable {
      private Integer soluongnguoithamgia;
      private int soLuongDaThamGia;
      private boolean hetHan = false;
+     private boolean batDau = false;
      private Set nguoithamgiahoinghis = new HashSet(0);
      private Set hinhanhs = new HashSet(0);
 
@@ -48,6 +49,9 @@ public class Hoinghi  implements java.io.Serializable {
        if (thoigiankt.before(new Date())){
            this.hetHan = true;
        }
+       if (thoigianbd.before(new Date())){
+           this.batDau = true;
+       }
     }
     public Hoinghi(int id) {
         this.id = id;
@@ -67,6 +71,9 @@ public class Hoinghi  implements java.io.Serializable {
        if (thoigiankt.before(new Date())){
            this.hetHan = true;
        }
+       if (thoigianbd.before(new Date())){
+           this.batDau = true;
+       }
     }
     
     public Hoinghi(Diadiem diadiem, String ten, String mota, String motachitiet, Date thoigianbd, Date thoigiankt, Integer soluongnguoithamgia) {
@@ -80,6 +87,9 @@ public class Hoinghi  implements java.io.Serializable {
        if (thoigiankt.before(new Date())){
            this.hetHan = true;
        }
+       if (thoigianbd.before(new Date())){
+           this.batDau = true;
+       }
     }
     
     public void setHoinghi(Diadiem diadiem, String ten, String mota, String motachitiet, Date thoigianbd, Date thoigiankt, Integer soluongnguoithamgia) {
@@ -92,6 +102,9 @@ public class Hoinghi  implements java.io.Serializable {
        this.soluongnguoithamgia = soluongnguoithamgia;
        if (thoigiankt.before(new Date())){
            this.hetHan = true;
+       }
+       if (thoigianbd.before(new Date())){
+           this.batDau = true;
        }
     }
    
@@ -136,6 +149,9 @@ public class Hoinghi  implements java.io.Serializable {
     
     public void setThoigianbd(Date thoigianbd) {
         this.thoigianbd = thoigianbd;
+        if (thoigianbd.before(new Date())){
+           this.batDau = true;
+       }
     }
     public Date getThoigiankt() {
         return this.thoigiankt;
@@ -181,6 +197,15 @@ public class Hoinghi  implements java.io.Serializable {
     public void setHetHan(boolean hetHan) {
         this.hetHan = hetHan;
     }
+
+    public boolean isBatDau() {
+        return batDau;
+    }
+
+    public void setBatDau(boolean batDau) {
+        this.batDau = batDau;
+    }
+
 
     @Override
     public String toString() {

@@ -141,7 +141,7 @@ public class HomeItem extends javax.swing.JPanel implements ListCellRenderer<Hoi
     public Component getListCellRendererComponent(JList<? extends Hoinghi> list, Hoinghi value, int index, boolean isSelected, boolean cellHasFocus) {
         hoinghi = value;
         if (Home.getCurrentUser()!=null && Home.getCurrentUser().getPermission()==1){
-            if (value.isHetHan()){
+            if (value.isBatDau()){
             chinhSua.setVisible(false);
             }
             else {

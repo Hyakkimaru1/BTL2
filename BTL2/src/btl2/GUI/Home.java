@@ -198,7 +198,9 @@ public class Home extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
+        homeBT.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         homeBT.setText("Home");
+        homeBT.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         homeBT.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 homeBTMouseClicked(evt);
