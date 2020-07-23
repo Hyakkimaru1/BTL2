@@ -147,6 +147,7 @@ public class DialogSignUp extends javax.swing.JFrame {
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         // TODO add your handling code here:
+        Home.getInstance().setEnabled(true);
         dispose();
     }//GEN-LAST:event_jLabel3MouseClicked
 
@@ -166,6 +167,7 @@ public class DialogSignUp extends javax.swing.JFrame {
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
+        Home.getInstance().setEnabled(true);
         List <User> users = UserDAO.check(username.getText());
         if (users==null){
             if (password.getText().equals("")||username.getText().trim().equals("")){

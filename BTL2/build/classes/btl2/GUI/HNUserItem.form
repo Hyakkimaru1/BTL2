@@ -41,14 +41,14 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="timeEnd" min="-2" pref="141" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="slThamGia" pref="271" max="32767" attributes="0"/>
-                      </Group>
-                      <Component id="diaChi" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="slThamGia" min="-2" pref="66" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jLabel2" min="-2" pref="187" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="diaChi" alignment="0" min="-2" pref="363" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -74,6 +74,7 @@
                   <Component id="xetDuyet" alignment="3" min="-2" pref="15" max="-2" attributes="0"/>
                   <Component id="slThamGia" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -156,6 +157,14 @@
           <Color blue="cc" green="66" red="0" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Ng&#x1b0;&#x1edd;i tham gia"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel2">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="ff" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="&#x110;&#xe3; di&#x1ec5;n ra"/>
       </Properties>
     </Component>
   </SubComponents>

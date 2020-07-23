@@ -131,6 +131,11 @@ public class User  implements java.io.Serializable {
     public void setNguoithamgiahoinghis(Set nguoithamgiahoinghis) {
         this.nguoithamgiahoinghis = nguoithamgiahoinghis;
     }
+
+    @Override
+    public String toString() {
+        return username; //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
 

@@ -13,6 +13,7 @@ import btl2.entiny.Nguoithamgiahoinghi;
 import btl2.entiny.User;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -27,9 +28,11 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.MouseInputAdapter;
 
 /**
  *
@@ -75,14 +78,31 @@ public class AdminManage extends javax.swing.JPanel {
         containerListView = new JScrollPane(jList1);
         containerListView.setBorder(createEmptyBorder());
         listHN.add(containerListView);
-        jList1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        
+        jList1.addMouseListener(new MouseInputAdapter() {
             @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (!jList1.getSelectedValue().isBatDau()){
-                    Home.swapLayout(new AddHoiNghi(jList1.getSelectedValue()));
-                }
+            public void mouseClicked(MouseEvent e) {
+               jList1.setSelectedIndex(getRow(e.getPoint()));
+               if (SwingUtilities.isRightMouseButton(e)){
+                   if (!jList1.getSelectedValue().isBatDau()){
+                       Object[] objects = {"Chỉnh sửa","Thoát"};
+                       int result = -1;
+                        result = JOptionPane.showOptionDialog(Home.getInstance(),"Bạn có muốn chỉnh sửa hội nghị này?"
+                        ,"Chỉnh sửa",JOptionPane.INFORMATION_MESSAGE,JOptionPane.INFORMATION_MESSAGE,null,objects,objects[0]);
+                        if (result==0){
+                            Home.swapLayout(new AddHoiNghi(jList1.getSelectedValue()));
+                        }
+                   }
+                   else {
+                       JOptionPane.showMessageDialog(Home.getInstance(),"Hội nghị này đã diễn ra");
+                   }
+               }
+               else {
+                   Home.swapLayout(new ChiTietHN(jList1.getSelectedValue()));
+               }
             }
         });
+        
         jComboBox3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -231,6 +251,11 @@ public class AdminManage extends javax.swing.JPanel {
         });
     }
     
+     private int getRow(Point point)
+    {
+        return jList1.locationToIndex(point);
+    }
+    
     private void filerUserAcc(String keySearch){
         int selected = jComboBox1.getSelectedIndex();
         userAccListCurrent.clear();
@@ -344,7 +369,7 @@ public class AdminManage extends javax.swing.JPanel {
         } else if(selected==1) {
             if(fullListHN!=null){
                 fullListHN.forEach((val)-> {   
-                    if (!val.isHetHan()){
+                    if (!val.isBatDau()){
                         model.addElement(val);
                 }});
             }
@@ -352,7 +377,7 @@ public class AdminManage extends javax.swing.JPanel {
         else if(selected==2) {
             if(fullListHN!=null){
                 fullListHN.forEach((val)-> {   
-                    if (val.isHetHan()){
+                    if (val.isBatDau()){
                         model.addElement(val);
                 }});
             }
@@ -448,6 +473,7 @@ public class AdminManage extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(51, 51, 51));
         jLabel1.setText("Quản lý hội nghị");
+        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel1MouseClicked(evt);
@@ -457,6 +483,7 @@ public class AdminManage extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(119, 119, 119));
         jLabel2.setText("Quản lý người dùng");
+        jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel2MouseClicked(evt);
@@ -496,6 +523,7 @@ public class AdminManage extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(51, 51, 51));
         jLabel3.setText("Thêm và sửa");
+        jLabel3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel3MouseClicked(evt);
@@ -505,6 +533,7 @@ public class AdminManage extends javax.swing.JPanel {
         jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(119, 119, 119));
         jLabel4.setText("Phê duyệt yêu cầu");
+        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel4MouseClicked(evt);
@@ -562,6 +591,7 @@ public class AdminManage extends javax.swing.JPanel {
         btThemMoi.setForeground(new java.awt.Color(255, 255, 255));
         btThemMoi.setText("Thêm mới");
         btThemMoi.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        btThemMoi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btThemMoi.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btThemMoiMouseClicked(evt);
@@ -594,11 +624,11 @@ public class AdminManage extends javax.swing.JPanel {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(listHN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addContainerGap(389, Short.MAX_VALUE)
+                        .addContainerGap(416, Short.MAX_VALUE)
                         .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(45, 45, 45)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35)
                         .addComponent(btThemMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -606,12 +636,12 @@ public class AdminManage extends javax.swing.JPanel {
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btThemMoi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox3)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(listHN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btThemMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(listHN, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE))
         );
 
         jPanel5.add(jPanel9, "card3");

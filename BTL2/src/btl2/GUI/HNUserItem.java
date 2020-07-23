@@ -47,6 +47,7 @@ public class HNUserItem extends javax.swing.JPanel implements  ListCellRenderer<
         diaChi = new javax.swing.JLabel();
         slThamGia = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 153, 51)));
@@ -79,6 +80,9 @@ public class HNUserItem extends javax.swing.JPanel implements  ListCellRenderer<
         jLabel1.setForeground(new java.awt.Color(0, 102, 204));
         jLabel1.setText("Người tham gia");
 
+        jLabel2.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel2.setText("Đã diễn ra");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -94,12 +98,13 @@ public class HNUserItem extends javax.swing.JPanel implements  ListCellRenderer<
                         .addComponent(timeBegin, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(timeEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(slThamGia, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE))
-                        .addComponent(diaChi, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(slThamGia, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(diaChi, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -118,7 +123,8 @@ public class HNUserItem extends javax.swing.JPanel implements  ListCellRenderer<
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(xetDuyet, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(slThamGia)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -127,6 +133,7 @@ public class HNUserItem extends javax.swing.JPanel implements  ListCellRenderer<
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel diaChi;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel nameHN;
     private javax.swing.JLabel slThamGia;
     private javax.swing.JLabel timeBegin;
@@ -141,6 +148,12 @@ public class HNUserItem extends javax.swing.JPanel implements  ListCellRenderer<
             this.setBackground(list.getSelectionBackground());
         } else { // when don't select
             this.setBackground(list.getBackground());
+        }
+        if (value.isBatDau()){
+            jLabel2.setVisible(true);
+        }
+        else {
+            jLabel2.setVisible(false);
         }
         NguoithamgiahoinghiId ntghnId = new NguoithamgiahoinghiId(Home.getCurrentUser().getId(), value.getId());
         Nguoithamgiahoinghi ntghn = NguoithamgiahoinghiDAO.get(ntghnId);

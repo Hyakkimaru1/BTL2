@@ -6,11 +6,19 @@
 package btl2.GUI;
 
 import btl2.DAO.HoiNghiDAO;
+import btl2.DAO.UserDAO;
 import btl2.entiny.Hoinghi;
 import btl2.entiny.Nguoithamgiahoinghi;
+import btl2.entiny.NguoithamgiahoinghiId;
+import btl2.entiny.User;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -40,20 +48,17 @@ public class ChiTietHN extends javax.swing.JPanel {
         createDetailPage();
     }
     
+    public void updateCurrentHN(){
+        hoinghi = HoiNghiDAO.get(hoinghi.getId());
+        createDetailPage();
+    }
+    
     private void createDetailPage(){
-        if (HoiNghiDAO.getImg(hoinghi)!=""){
+        if (!"".equals(HoiNghiDAO.getImg(hoinghi))){
             img.setIcon(AddHoiNghi.ResizeImage(HoiNghiDAO.getImg(hoinghi), 360,224));
         }
         name.setText(hoinghi.getTen());
-        detail.setText("<html><p style=\"width:700px\">"+hoinghi.getMotachitiet()+"</p></html>");
-        if (Home.isLogin() && HoiNghiDAO.isUserJoin(Home.getCurrentUser(), hoinghi)!=0){
-            if (HoiNghiDAO.isUserJoin(Home.getCurrentUser(), hoinghi) == 1){
-                    userjoin.setText("Đang chờ xét duyệt");
-            }
-            else {
-                 userjoin.setText("Đã tham gia");
-            }
-        }
+        detail.setText("<html><p style=\"width:480px\">"+hoinghi.getMotachitiet()+"</p></html>");
         DateFormat dateFormat = new SimpleDateFormat("hh:mm dd/MM/yyyy");
         String strDay="DD/MM/YYYY";
         if (hoinghi.getThoigianbd()!= null) {
@@ -65,25 +70,58 @@ public class ChiTietHN extends javax.swing.JPanel {
         }
         timeEnd.setText(strDay);
         String sltg = hoinghi.getSoluongnguoithamgia()==null?"0/0":String.valueOf(hoinghi.getSoLuongDaThamGia())+'/'+String.valueOf(hoinghi.getSoluongnguoithamgia());
-        System.out.println("Số lượng tham gia: "+sltg);
-        userjoin.setText("Số lượng tham gia: "+sltg);
+        
+        userjoin.setText("Số lượng đăng ký tham gia: "+sltg);
+        if (Home.isLogin() && HoiNghiDAO.isUserJoin(Home.getCurrentUser(), hoinghi)!=0){
+            if (HoiNghiDAO.isUserJoin(Home.getCurrentUser(), hoinghi) == 1){
+                    userjoin.setText("Đang chờ xét duyệt");
+            }
+            else {
+                 userjoin.setText("Đã tham gia");
+            }
+        }
         if (hoinghi.getSoLuongDaThamGia()==hoinghi.getSoluongnguoithamgia()){
             jButton2.setVisible(false);
         }
         else {
-            if (Home.isLogin() && HoiNghiDAO.isUserJoin(Home.getCurrentUser(), hoinghi) != 0){
-                jButton2.setVisible(false);
-                if (HoiNghiDAO.isUserJoin(Home.getCurrentUser(), hoinghi) == 1){
-                    userjoin.setText("Đang chờ xét duyệt");
+            if (Home.isLogin()){
+                if (Home.getCurrentUser().getPermission()==1){
+                    jButton2.setVisible(false);
                 }
-                else {
-                    userjoin.setText("Đã tham gia");
+                else{
+                    if (HoiNghiDAO.isUserJoin(Home.getCurrentUser(), hoinghi) != 0){
+                        jButton2.setVisible(false);
+                        if (HoiNghiDAO.isUserJoin(Home.getCurrentUser(), hoinghi) == 1){
+                            userjoin.setText("Đang chờ xét duyệt");
+                        }
+                        else {
+                            userjoin.setText("Đã tham gia");
+                        }
+
+                    }
+                    else {
+                        jButton2.setVisible(true);
+                    } 
                 }
-                
             }
-            else {
-                jButton2.setVisible(true);
-            } 
+            
+        }
+        if (hoinghi.getNguoithamgiahoinghis().size()>0){
+            List<String> listUsersJoin = new ArrayList<>();
+            for (Object object : hoinghi.getNguoithamgiahoinghis()) {
+                 Nguoithamgiahoinghi ni = (Nguoithamgiahoinghi) object;
+                 NguoithamgiahoinghiId ntg = ni.getId();
+                 listUsersJoin.add(UserDAO.get(ntg.getUser()).toString());
+            }
+            
+            DefaultListModel listModel;
+            listModel = new DefaultListModel();
+            for (String string : listUsersJoin) {
+                listModel.addElement(string);
+            }
+            jList1.setModel(listModel);
+            DefaultListCellRenderer renderer = (DefaultListCellRenderer) jList1.getCellRenderer();
+            renderer.setHorizontalAlignment(SwingConstants.CENTER);
         }
     }
     
@@ -109,6 +147,12 @@ public class ChiTietHN extends javax.swing.JPanel {
         timeEnd = new javax.swing.JLabel();
         timeBG1 = new javax.swing.JLabel();
         timeBG2 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jlistUsersJoin = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new javax.swing.OverlayLayout(this));
@@ -142,10 +186,16 @@ public class ChiTietHN extends javax.swing.JPanel {
                 jButton2MouseClicked(evt);
             }
         });
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         userjoin.setBackground(new java.awt.Color(255, 255, 255));
         userjoin.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         userjoin.setForeground(new java.awt.Color(0, 102, 255));
+        userjoin.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
         timeEnd.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         timeEnd.setForeground(new java.awt.Color(255, 51, 51));
@@ -159,6 +209,51 @@ public class ChiTietHN extends javax.swing.JPanel {
         timeBG2.setForeground(new java.awt.Color(102, 102, 102));
         timeBG2.setText("đến");
 
+        jPanel2.setBackground(new java.awt.Color(248, 248, 248));
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        jPanel4.setBackground(new java.awt.Color(248, 248, 248));
+
+        jLabel1.setBackground(new java.awt.Color(248, 248, 248));
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Người tham dự");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanel2.add(jPanel4, java.awt.BorderLayout.PAGE_START);
+
+        jlistUsersJoin.setBackground(new java.awt.Color(248, 248, 248));
+        jlistUsersJoin.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane2.setBackground(new java.awt.Color(248, 248, 248));
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        jList1.setBackground(new java.awt.Color(248, 248, 248));
+        jList1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jList1.setForeground(new java.awt.Color(0, 153, 255));
+        jScrollPane2.setViewportView(jList1);
+
+        jlistUsersJoin.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+
+        jPanel2.add(jlistUsersJoin, java.awt.BorderLayout.CENTER);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -166,7 +261,9 @@ public class ChiTietHN extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(detail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(detail, javax.swing.GroupLayout.PREFERRED_SIZE, 613, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(img, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(50, 50, 50)
@@ -175,24 +272,34 @@ public class ChiTietHN extends javax.swing.JPanel {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(59, 59, 59)
-                                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(userjoin, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(timeBG1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(timeBG, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(timeBG2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(timeEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(timeEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(59, 59, 59)
+                                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(userjoin, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addContainerGap())))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(img, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(22, 22, 22)
+                        .addComponent(detail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(9, 9, 9)
                         .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -203,13 +310,15 @@ public class ChiTietHN extends javax.swing.JPanel {
                             .addComponent(timeBG1)
                             .addComponent(timeBG2))
                         .addGap(18, 18, 18)
-                        .addComponent(userjoin, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(img, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22)
-                .addComponent(detail, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(userjoin, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap())))))
         );
 
         jScrollPane1.setViewportView(jPanel1);
@@ -221,6 +330,7 @@ public class ChiTietHN extends javax.swing.JPanel {
         // TODO add your handling code here:
         if (!Home.isLogin()){
             Dialog.getInstance().setVisible(true);
+            Home.getInstance().setEnabled(false);
         }
         else {
             Object[] objects = {"Tham gia","Huỷ"};
@@ -240,6 +350,7 @@ public class ChiTietHN extends javax.swing.JPanel {
                     if (HoiNghiDAO.addUserJoin(new Nguoithamgiahoinghi(hoinghi,Home.getCurrentUser()))){
                         jButton2.setVisible(false);
                         userjoin.setText("Đang chờ xét duyệt");
+                        updateCurrentHN();
                         Home.upDateListHN();
                     }
                     else {
@@ -251,13 +362,23 @@ public class ChiTietHN extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton2MouseClicked
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel detail;
     private javax.swing.JLabel img;
     private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPanel jlistUsersJoin;
     private javax.swing.JLabel name;
     private javax.swing.JLabel timeBG;
     private javax.swing.JLabel timeBG1;

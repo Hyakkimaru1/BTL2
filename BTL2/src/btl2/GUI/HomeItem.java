@@ -25,6 +25,7 @@ public class HomeItem extends javax.swing.JPanel implements ListCellRenderer<Hoi
     /**
      * Creates new form NewJPanel
      */
+    Color myColor = new Color(255,153,51);
     Hoinghi hoinghi = null;
     public HomeItem() {
         initComponents();
@@ -97,7 +98,7 @@ public class HomeItem extends javax.swing.JPanel implements ListCellRenderer<Hoi
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(people, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(chinhSua, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addComponent(chinhSua)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -142,9 +143,13 @@ public class HomeItem extends javax.swing.JPanel implements ListCellRenderer<Hoi
         hoinghi = value;
         if (Home.getCurrentUser()!=null && Home.getCurrentUser().getPermission()==1){
             if (value.isBatDau()){
-            chinhSua.setVisible(false);
+                chinhSua.setText("Không chỉnh sửa");
+                chinhSua.setBackground(Color.red);
+                chinhSua.setVisible(true);
             }
             else {
+                chinhSua.setText("Có thể chỉnh sửa");
+                chinhSua.setBackground(myColor);
                 chinhSua.setVisible(true);
             }
         } else {

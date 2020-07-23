@@ -8,9 +8,13 @@ package btl2.GUI;
 import btl2.DAO.HoiNghiDAO;
 import btl2.DAO.NguoithamgiahoinghiDAO;
 import btl2.entiny.Hoinghi;
+import btl2.entiny.Nguoithamgiahoinghi;
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,7 +24,9 @@ import java.util.List;
 import static javax.swing.BorderFactory.createEmptyBorder;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -64,16 +70,44 @@ public class UserOption extends javax.swing.JPanel {
         jsp.setBackground(new Color(248,248,248));
         jsp.setBorder(new EmptyBorder(1, 1, 1, 1));
         jPanel4.add(jsp);
-        listHN.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        /*listHN.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                Hoinghi item = HoiNghiDAO.get(listHN.getSelectedValue().getId());
-                //System.out.println(item.getNguoithamgiahoinghis().size());
-                if (item!=null){
-                    chiTietHN = new ChiTietHN(item);
-                    Home.showChiTietHN(chiTietHN);
-                }
+                
             }
+        }); */
+        
+        listHN.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+               listHN.setSelectedIndex(getRow(e.getPoint()));
+               if (SwingUtilities.isRightMouseButton(e)) {
+                    if (!listHN.getSelectedValue().isBatDau())
+                    {
+                        Object[] objects = {"Bỏ tham dự","Thoát"};
+                        int result = -1;
+                        String namesHN = listHN.getSelectedValue().getTen();
+                        result = JOptionPane.showOptionDialog(Home.getInstance(),"Bạn có muốn bỏ tham dự hội nghị "+namesHN+"?"
+                                 ,"Bỏ tham dự",JOptionPane.INFORMATION_MESSAGE,JOptionPane.INFORMATION_MESSAGE,null,objects,objects[0]);
+                        if (result==0){
+                            NguoithamgiahoinghiDAO.reject(new Nguoithamgiahoinghi(listHN.getSelectedValue(), Home.getCurrentUser()));
+                            upDateListHN();
+                        }   
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(Home.getInstance(),"Hội nghị này đã diễn ra");
+                    }
+               }
+               else {
+                    Hoinghi item = HoiNghiDAO.get(listHN.getSelectedValue().getId());
+                    //System.out.println(item.getNguoithamgiahoinghis().size());
+                    if (item!=null){
+                        chiTietHN = new ChiTietHN(item);
+                        Home.showChiTietHN(chiTietHN);
+                    }
+               }
+            }
+            
         });
         
         jComboBox1.addActionListener(new ActionListener() {
@@ -91,10 +125,19 @@ public class UserOption extends javax.swing.JPanel {
         });
     }
      
+    private void upDateListHN(){
+        hoinghis = HoiNghiDAO.listUserJoin(Home.getCurrentUser());
+        searchHN(searchBox.getText().trim().toLowerCase());
+    }
+     
+    private int getRow(Point point)
+    {
+        return listHN.locationToIndex(point);
+    }
+     
     private void searchHN(String search){
         int selected = jComboBox1.getSelectedIndex();
         sortListHN.clear();
-        System.out.println(selected);
         if (selected == 0 ){
             if (searchBox.getText().trim().equals(""))
             {     
@@ -327,6 +370,7 @@ public class UserOption extends javax.swing.JPanel {
         jLabel1.setForeground(new java.awt.Color(51, 51, 51));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Danh sách hội nghị đã đăng ký");
+        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel1MouseClicked(evt);
@@ -337,6 +381,7 @@ public class UserOption extends javax.swing.JPanel {
         jLabel2.setForeground(new java.awt.Color(119, 119, 119));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Cài đặt tài khoản");
+        jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel2MouseClicked(evt);
